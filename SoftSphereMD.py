@@ -77,7 +77,7 @@ steps = 5000
 # Averaging frequency
 Nsamp = 10
 
-print("MD Run with N=", N, "Number of MC steps=", steps, "and area density,", N/A)
+print("MD Run with N=", N, "for time=", steps*dt, "and area density,", N/A)
 
 # Container for positions in 2d
 x=np.zeros([N,2])
