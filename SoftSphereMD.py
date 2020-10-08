@@ -22,12 +22,6 @@ def initialize(x,v,L,Nx):
             n=n+1
     v[:,0]=v[:,0]-sum(v[:,0])/(n-1)
     v[:,1]=v[:,1]-sum(v[:,1])/(n-1)
-    if tagflag:
-        v[:,:]=0.
-        v[10,0]=6.2*2
-        v[-1,0]=-6.2*2
-        v[10,1]=7.2343*2
-        v[-1,1]=-7.2343*2
 
     return x,v
 
@@ -81,57 +75,32 @@ def Verlet(x,v,f,f1,Lx):
     x=x%Lx
     return x,v
 
-
-
-
 # Parameters #
-##
 ##
 # Size of lattice, Nx x Nx
 Nx = 8
-
 # Total number of particles
 N = Nx*Nx
-
 # Temperature
 T=2.5
-
 # Size of Box
 Lx=10.
-
 # Timestep
 dt=0.002
-
 # Area
 A=Lx**2
-
 # Number of steps
 steps = 5000
-
 # Averaging frequency
 Nsamp = 10
-
 # Make image of system
 imflag = True
-
 # Make velocity distribution
 vhistflag= True
-
 # Make speed distribution
 vdhistflag= False
 
-# Make occupation distribution
-dhistflag= False
-Rstar=2.
-Nm=int(Rstar**2.*pi/Lx/Lx*N)
-NNs=array([])
-
-# Initialize two particles with nonzero v
-tagflag= True
-# Integrate backwards
-backflag= True
-
-print("MC Run with N=", N, "Number of MC steps=", steps, "and area density,", N/A)
+print("MD Run with N=", N, "Number of MC steps=", steps, "and area density,", N/A)
 
 # Container for positions in 2d
 x=np.zeros([N,2])
@@ -156,24 +125,12 @@ if imflag:
         points3=ax1.hist(sqrt(v[:,0]**2.+v[:,1]**2.),bins=arange(0,8,1),density=1)
         draw()
 
-    if dhistflag:
-        fig1, ax1 = plt.subplots(1, 1,figsize=(8,8))
-        RR=sqrt((x[:,0]-Lx/2.)**2.+(x[:,1]-Lx/2.)**2.)
-        NNs=append(NNs,len(RR[RR<Rstar]))
-        points3=ax1.hist(NNs,bins=arange(0,5*Nm,1),normed=1)
-        ax1.plot(Lx/2.,Lx/2.,'or',20.,alpha=0.2)
-        draw()
     fig, ax = plt.subplots(1, 1,figsize=(8,8))
     ax.set_aspect('equal')
     ax.set_xlim(0, Lx-1/2.)
     ax.set_ylim(0, Lx-1/2.)
     plt.setp(ax, xticks=[], yticks=[])
     points = ax.plot(x[:,0],x[:,1],'ob',ms=23*20./Lx)[0]
-    if dhistflag:
-        s = ((ax.get_window_extent().width  / (Lx-1/2.) * 72./fig.dpi) ** 2)
-        ax.scatter(Lx/2.,Lx/2.,s=s*10*Rstar,alpha=0.2)
-        ax.scatter(Lx/2.,Lx/2.,s=s*10*Rstar*2,alpha=0.2)
-        ax.scatter(Lx/2.,Lx/2.,s=s*10*Rstar*3.5,alpha=0.2)
 
     if tagflag: points2 = ax.plot([x[10,0],x[-1,0]],[x[10,1],x[-1,1]],'or',ms=23*20./Lx)[0]
     draw()
@@ -226,15 +183,6 @@ for step in range(steps):
          
          fig1.canvas.draw()
          plt.pause(0.02)
-
-     if(step%(20*Nsamp)==0 and dhistflag):
-        ax1.cla()
-        RR=sqrt((x[:,0]-Lx/2.)**2.+(x[:,1]-Lx/2.)**2.)
-        NNs=append(NNs,len(RR[RR<Rstar]))
-        ax1.hist(NNs,bins=arange(0,5*Nm,1),density=1)
-        fig1.canvas.draw()
-        plt.pause(0.02)
-
 
 if raw_input("<Hit Enter To Close>"):
     plt.close(fig)
