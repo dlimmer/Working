@@ -41,7 +41,7 @@ def flip(x,y,spins,energy,mag):
    right=spins[(x+1)%Nx,y]
 
    # Compute change in energy
-   deltaE =-2.*J*(up+down+left+right+h)
+   deltaE =-2.*J*(up+down+left+right+h)*spino
   
    # Metropolis Acceptance Criteria
    if np.random.rand()<exp(-beta*detalE):
